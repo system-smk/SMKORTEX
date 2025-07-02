@@ -92,4 +92,3 @@ models/vigogne-2-7b-chat.Q4_K_M.gguf
 - llama.cpp : https://github.com/ggerganov/llama.cpp
 ```
 
----
