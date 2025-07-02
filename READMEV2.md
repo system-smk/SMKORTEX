@@ -1,4 +1,4 @@
-```markdown
+
 # 🧠 SMKortex — Assistant local basé sur LLaMA
 
 SMKortex est une interface locale personnalisée autour d’un modèle LLaMA (comme Vigogne 2), intégrant des scripts Bash simples, des logs automatiques, et un sous-module `llama.cpp`.
