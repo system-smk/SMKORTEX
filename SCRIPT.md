@@ -68,7 +68,7 @@ alias smk="./scripts/front-smkortex.sh"
 
 - [`README.md`](./README.md) pour l’installation complète du projet
 - [`MODELES.md`](./MODELES.md) pour trouver un modèle `.gguf` compatible
-```
+
 
 
 
