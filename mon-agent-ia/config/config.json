@@ -1,6 +1,0 @@
-{
-  "llama_model_path": "llama/tinyllama.gguf",
-  "mcp_server_port": 9000,
-  "enable_voice": true,
-  "default_language": "fr"
-}
