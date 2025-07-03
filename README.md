@@ -24,7 +24,7 @@ SMKORTEX/
 - Le modèle `.gguf` doit être exactement dans `llama/models/`
 - Le binaire `llama-cli` doit être compilé dans `llama/llama.cpp/build/bin/`
 - Les scripts doivent pointer vers ces chemins dans leurs variables `MODEL` et `BIN`
-```
+
 
 
 
