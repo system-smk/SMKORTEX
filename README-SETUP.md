@@ -2,7 +2,7 @@
 
 ## 📘 `README.md` — Projet SMKortex
 
-```markdown
+
 # 🤖 SMKortex
 
 SMKortex est un assistant IA local, francophone, propulsé par `llama.cpp` et des modèles au format `.gguf`.  
