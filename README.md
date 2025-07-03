@@ -1,7 +1,3 @@
-
-
-## ✨ Exemple de plan révisé pour `README.md`
-
 # 🤖 SMKortex — Assistant IA local en français
 
 Bienvenue dans ton assistant IA 100 % local, propulsé par `llama.cpp` + Vigogne 2.  
