@@ -1,76 +1,83 @@
 #!/bin/bash
 
-echo "🧠 Setup de SMKortex — Assistant IA local"
-echo "----------------------------------------"
+echo "🧠 Installation de SMKortex en cours..."
+echo "---------------------------------------"
 
-# === Préparation de l’arborescence ===
-mkdir -p llama models logs scripts sources
+# === Répertoires ===
+mkdir -p llama/models
+mkdir -p scripts
+mkdir -p logs
 
-# === Clonage de llama.cpp si manquant ===
+# === Clonage de llama.cpp ===
 if [ ! -d "llama/llama.cpp" ]; then
   echo "📥 Clonage de llama.cpp..."
-  git submodule add https://github.com/ggerganov/llama.cpp llama/llama.cpp
+  git clone https://github.com/ggerganov/llama.cpp.git llama/llama.cpp
 else
   echo "✅ llama.cpp déjà présent"
 fi
 
-# === Compilation de llama.cpp ===
+# === Compilation ===
 echo "🔨 Compilation de llama.cpp..."
 cd llama/llama.cpp
 make
 cd ../../
 
-# === Copie des scripts depuis sources/ vers scripts/ ===
-echo "📜 Installation des scripts..."
-cp sources/chat-smkortex.sh scripts/
-cp sources/front-smkortex.sh scripts/
-chmod +x scripts/*.sh
+# === Téléchargement du modèle (Vigogne) ===
+MODEL_FILE="llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+if [ ! -f "$MODEL_FILE" ]; then
+  echo "📦 Téléchargement du modèle Vigogne (Q4_K_M)..."
+  curl -L -o "$MODEL_FILE" \
+    https://huggingface.co/bofenghuang/vigogne-2-7b-chat-GGUF/resolve/main/vigogne-2-7b-chat.Q4_K_M.gguf
+else
+  echo "✅ Modèle déjà présent"
+fi
 
-# === Génération du fichier SCRIPTS.md ===
+# === Copie des scripts (depuis sources/) ===
+echo "📜 Installation des scripts bash..."
+for file in chat-smkortex.sh front-smkortex.sh chatv2-kortex.sh; do
+  if [ -f "sources/$file" ]; then
+    cp "sources/$file" scripts/
+    chmod +x "scripts/$file"
+  fi
+done
+
+# === Génération de la doc des scripts ===
 cat <<EOF > SCRIPTS.md
 # 📜 Scripts SMKortex
 
-## 1. chat-smkortex.sh
+## ▸ chat-smkortex.sh
+Session rapide avec prompt système.
 
-Lance une session interactive rapide avec :
-\`\`\`bash
-./scripts/chat-smkortex.sh
-\`\`\`
+## ▸ front-smkortex.sh
+Dialogue ligne par ligne avec contexte.
 
-- Utilise un prompt système SMKortex
-- Crée un fichier log dans \`logs/\`
-- Réponses limitées à 256 tokens
+## ▸ chatv2-kortex.sh
+Nouvelle interface optimisée, plus stable et personnalisable.
 
----
-
-## 2. front-smkortex.sh
-
-Interface conviviale ligne par ligne avec historique :
+## 🔁 Exécution typique
 
 \`\`\`bash
-./scripts/front-smkortex.sh
+./scripts/chatv2-kortex.sh
 \`\`\`
 
-- Invite utilisateur claire avec \`<|UTILISATEUR|>:\`
-- Log complet des échanges
-- Mémoire locale via \`context.txt\`
-
----
-
-## 📁 Structure recommandée
+## 📁 Structure
 
 \`\`\`
-smkortex/
+.
+├── llama/
+│   ├── llama.cpp/
+│   └── models/
 ├── scripts/
-├── models/
-├── llama/llama.cpp/
 ├── logs/
-├── sources/
-├── SCRIPTS.md
-└── setup-smkortex.sh
+├── context.txt
+└── README.md / SCRIPTS.md
 \`\`\`
 
 EOF
+
+echo "✅ Installation terminée"
+echo "💬 Tu peux maintenant lancer : ./scripts/chatv2-kortex.sh"
+
 
 echo "✅ SMKortex installé !"
 echo "🧠 Tu peux maintenant lancer ./scripts/front-smkortex.sh"
