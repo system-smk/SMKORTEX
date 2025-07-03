@@ -83,15 +83,9 @@ Le fichier `.gguf` est placé dans `llama/models/` et utilisé par défaut dans 
 
 ---
 
-## 🚀 À venir
 
-- Choix interactif du modèle à installer
-- Interface visuelle TUI (avec `gum` ou `dialog`)
-- Support des commandes `!reset`, `!log off`, etc.
 
----
-
-💚 _Projet piloté avec passion et terminal_  
+💚 _Projet piloté avec passion  
 _By Mathieu-Karim & SMKortex_
-```
+
 
