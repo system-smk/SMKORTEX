@@ -2,7 +2,7 @@
 
 ## 📘 `README-chatv2.md` — Interface avancée `chatv2-kortex.sh`
 
-```markdown
+
 # 🧠 chatv2-kortex.sh
 
 `chatv2-kortex.sh` est un script Bash interactif conçu pour lancer une session de dialogue fluide avec SMKortex, un assistant IA local alimenté par `llama.cpp`.
