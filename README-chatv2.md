@@ -96,9 +96,4 @@ En haut du fichier, les variables suivantes peuvent être modifiées facilement 
 
 💬 En cas de souci, n’oublie pas de vérifier ton prompt, ton modèle et l’option `--temp` selon ta version de `llama-cli`.  
 Et surtout : amuse-toi à le faire évoluer 🛠️💚
-```
 
----
-
-Tu veux que je génère automatiquement une ligne dans le `SCRIPTS.md` ou `README.md` principal qui pointe vers ce fichier ?  
-On peut même faire un résumé en ligne de commande avec `smk-help` qui affiche ça proprement dans ton terminal 😏📚✨
