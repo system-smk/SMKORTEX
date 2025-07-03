@@ -1,6 +1,3 @@
-## ✅ Aperçu de structure intégrée dans le README
-
-
 ## 🗂️ Vérification de structure avant lancement
 
 Assure-toi que les fichiers sont bien placés avant de démarrer. En cas d’erreur au lancement (`model not found`, `llama-cli: command not found`, etc.), vérifie que tu as :
