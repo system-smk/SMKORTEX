@@ -26,5 +26,5 @@ SMKORTEX/
 - Les scripts doivent pointer vers ces chemins dans leurs variables `MODEL` et `BIN`
 ```
 
----
+
 
