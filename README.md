@@ -70,8 +70,8 @@ Tu peux maintenant dialoguer avec SMKortex directement depuis ton terminal.
 
 ---
 
-💚 _SMKortex est prêt quand toi tu l’es_  
-_Créé avec Copilot, soin et passion par Mathieu-Karim_
+💚 _Projet piloté avec passion
+By Mathieu-Karim & SMKortex
 
 
 
