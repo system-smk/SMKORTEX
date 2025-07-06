@@ -1,14 +1,19 @@
 #!/bin/bash
 
-echo "🧠 Installation de SMKortex en cours..."
-echo "---------------------------------------"
+echo "🧠 Installation complète de SMKortex"
+echo "------------------------------------"
 
-# === Répertoires ===
-mkdir -p llama/models
-mkdir -p scripts
-mkdir -p logs
+### 🔍 Dépendances système ###
+echo "📦 Vérification et installation des outils nécessaires..."
+REQUIRED_PKGS=(git cmake g++ wget build-essential libcurl4-openssl-dev)
+sudo apt update
+sudo apt install -y "${REQUIRED_PKGS[@]}"
 
-# === Clonage de llama.cpp ===
+### 📁 Préparation des dossiers ###
+echo "📁 Création des répertoires..."
+mkdir -p scripts logs llama/models
+
+### 🧠 Clonage de llama.cpp ###
 if [ ! -d "llama/llama.cpp" ]; then
   echo "📥 Clonage de llama.cpp..."
   git clone https://github.com/ggerganov/llama.cpp.git llama/llama.cpp
@@ -16,83 +21,47 @@ else
   echo "✅ llama.cpp déjà présent"
 fi
 
-# === Compilation ===
+### 🔨 Compilation ###
 echo "🔨 Compilation de llama.cpp..."
 cd llama/llama.cpp
-make
-cd ../../
-
-# === Téléchargement du modèle Vigogne ===
-if [ ! -d "vigogne" ]; then
-  echo "📁 Clonage du dépôt Vigogne (prompts, scripts)..."
-  git clone https://github.com/bofenghuang/vigogne.git
-else
-  echo "✅ Dépôt Vigogne déjà présent"
+mkdir -p build && cd build
+cmake .. && make -j$(nproc)
+if [ $? -ne 0 ]; then
+  echo "❌ Erreur de compilation de llama.cpp"
+  exit 1
 fi
+cd ../../../..
 
-# === Téléchargement du modèle quantifié GGUF ===
-MODEL_PATH="llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+### 🦙 Téléchargement du modèle GGUF ###
+MODEL_NAME="vigogne-2-7b-chat.Q4_K_M.gguf"
+MODEL_PATH="llama/models/$MODEL_NAME"
+MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$MODEL_NAME"
+
 if [ ! -f "$MODEL_PATH" ]; then
-  echo "📦 Téléchargement du modèle GGUF (Vigogne Q4_K_M)..."
-  wget -O "$MODEL_PATH" \
-    "https://huggingface.co/bofenghuang/vigogne-2-7b-chat-GGUF/resolve/main/vigogne-2-7b-chat.Q4_K_M.gguf?download=true"
+  echo "📥 Téléchargement du modèle Vigogne..."
+  wget "$MODEL_URL" -O "$MODEL_PATH"
 
   if [ $? -eq 0 ]; then
-    echo "✅ Modèle GGUF téléchargé ➤ $MODEL_PATH"
+    echo "✅ Modèle téléchargé ➤ $MODEL_PATH"
   else
-    echo "❌ Échec du téléchargement."
+    echo "❌ Échec du téléchargement du modèle"
     exit 1
   fi
 else
-  echo "✅ Modèle GGUF déjà présent"
+  echo "✅ Modèle déjà présent ➤ $MODEL_PATH"
+fi
 
-
-# === Copie des scripts (depuis sources/) ===
-echo "📜 Installation des scripts bash..."
-for file in chat-smkortex.sh front-smkortex.sh chatv2-kortex.sh; do
-  if [ -f "sources/$file" ]; then
-    cp "sources/$file" scripts/
-    chmod +x "scripts/$file"
+### 📜 Scripts Bash (optionnel) ###
+echo "📜 Vérification des scripts Bash..."
+for script in chatv2-kortex.sh front-smkortex.sh chat-smkortex.sh; do
+  if [ -f "sources/$script" ]; then
+    cp "sources/$script" scripts/
+    chmod +x "scripts/$script"
+    echo "✅ Script installé ➤ scripts/$script"
   fi
 done
 
-# === Génération de la doc des scripts ===
-cat <<EOF > SCRIPTS.md
-# 📜 Scripts SMKortex
-
-## ▸ chat-smkortex.sh
-Session rapide avec prompt système.
-
-## ▸ front-smkortex.sh
-Dialogue ligne par ligne avec contexte.
-
-## ▸ chatv2-kortex.sh
-Nouvelle interface optimisée, plus stable et personnalisable.
-
-## 🔁 Exécution typique
-
-\`\`\`bash
-./scripts/chatv2-kortex.sh
-\`\`\`
-
-## 📁 Structure
-
-\`\`\`
-.
-├── llama/
-│   ├── llama.cpp/
-│   └── models/
-├── scripts/
-├── logs/
-├── context.txt
-└── README.md / SCRIPTS.md
-\`\`\`
-
-EOF
-
-echo "✅ Installation terminée"
-echo "💬 Tu peux maintenant lancer : ./scripts/chatv2-kortex.sh"
-
-
-echo "✅ SMKortex installé !"
-echo "🧠 Tu peux maintenant lancer ./scripts/front-smkortex.sh"
+### 🧾 Terminé ###
+echo ""
+echo "🎉 SMKortex est prêt à réfléchir !"
+echo "🧠 Lance : ./scripts/chatv2-kortex.sh \"Bonjour toi\""
