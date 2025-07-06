@@ -1,5 +1,38 @@
 #!/bin/bash
 cd "$(dirname "$0")"
+if [[ "$1" == "--desinstaller" ]]; then
+  echo -e "\n🧹 Désinstallation de SMKortex..."
+
+  read -p "🛑 Êtes-vous sûr de vouloir supprimer SMKortex ? [o/N] : " CONFIRM
+  [[ "$CONFIRM" =~ ^[oO]$ ]] || { echo "🚫 Désinstallation annulée."; exit 0; }
+
+  rm -rf scripts logs llama
+  sudo rm -f /usr/local/bin/smkortex
+
+  echo -e "\n✅ SMKortex désinstallé proprement. À bientôt 🦙"
+  exit 0
+fi
+
+
+echo -e "\n📦 Que souhaitez-vous faire ?"
+echo "1. Installer SMKortex 🧠"
+echo "2. Désinstaller SMKortex 🧹"
+read -p "👉 Votre choix [1/2] : " USER_ACTION
+
+
+if [[ "$USER_ACTION" == "2" ]]; then
+  read -p "🛑 Êtes-vous sûr de vouloir supprimer SMKortex ? [o/N] : " CONFIRM
+  [[ "$CONFIRM" =~ ^[oO]$ ]] || { echo "🚫 Annulé."; exit 0; }
+
+  rm -rf scripts logs llama
+  sudo rm -f /usr/local/bin/smkortex
+
+  echo -e "\n✅ SMKortex désinstallé avec succès. À bientôt 🦙"
+  exit 0
+fi
+
+
+
 
 echo -e "\n\e[32m╔════════════════════════════════════╗"
 echo "║         🧠 SMKORTEX INSTALL        ║"
