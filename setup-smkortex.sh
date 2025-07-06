@@ -41,28 +41,37 @@ MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$
 LOG_PATH="logs/model_download.log"
 
 echo "📥 Téléchargement du modèle Vigogne..."
-mkdir -p llama/models logs
 touch "$LOG_PATH"
-wget "$MODEL_URL" -O "$MODEL_PATH" &
+
+# 🔄 Téléchargement en arrière-plan avec redirection des erreurs
+wget "$MODEL_URL" -O "$MODEL_PATH" 2> "$LOG_PATH" &
 PID=$!
 
+# 🎬 Spinner animé pendant le téléchargement
 spinner='|/-\'
 i=0
 while kill -0 $PID 2>/dev/null; do
+  printf "\r⏳ Téléchargement en cours... ${spinner:$i:1}"
   i=$(( (i+1) %4 ))
-  printf "\r📥 Téléchargement en cours... ${spinner:$i:1}"
   sleep 0.2
 done
 echo -e "\r✅ Téléchargement terminé                         "
 
-
-if [ -f "$MODEL_PATH" ]; then
-  echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
-else
-  echo "❌ Échec du téléchargement. Détail du log :"
+# 🔍 Vérifie si le fichier existe
+if [ ! -f "$MODEL_PATH" ]; then
+  echo "❌ Le fichier n'existe pas ➤ Échec du téléchargement."
   cat "$LOG_PATH"
   exit 1
 fi
+
+# 🧪 Vérifie si le fichier est une page HTML déguisée
+if file "$MODEL_PATH" | grep -qi html; then
+  echo "❌ Le fichier téléchargé semble être une page HTML, pas un modèle GGUF."
+  head "$MODEL_PATH"
+  exit 1
+fi
+
+echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
 
 ### 📜 Déploiement des scripts personnalisés (optionnel) ###
 echo "📜 Déploiement des scripts Bash..."
