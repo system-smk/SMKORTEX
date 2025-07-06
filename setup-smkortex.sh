@@ -5,7 +5,7 @@ echo "------------------------------------"
 
 ### 🔍 Dépendances système ###
 echo "📦 Vérification et installation des outils nécessaires..."
-REQUIRED_PKGS=(git cmake g++ wget build-essential libcurl4-openssl-dev)
+REQUIRED_PKGS=(git cmake g++ wget build-essential libcurl4-openssl-dev ccache)
 sudo apt update
 sudo apt install -y "${REQUIRED_PKGS[@]}"
 
@@ -25,6 +25,8 @@ fi
 echo "🔨 Compilation de llama.cpp..."
 cd llama/llama.cpp
 mkdir -p build && cd build
+export CMAKE_C_COMPILER_LAUNCHER=ccache
+export CMAKE_CXX_COMPILER_LAUNCHER=ccache
 cmake .. && make -j$(nproc)
 if [ $? -ne 0 ]; then
   echo "❌ Erreur de compilation de llama.cpp"
@@ -39,7 +41,11 @@ MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$
 
 echo "📥 Téléchargement du modèle Vigogne..."
 mkdir -p llama/models
-wget "$MODEL_URL" -O "$MODEL_PATH"
+wget "$MODEL_URL" -O "$MODEL_PATH" 2> logs/model_download.log
+# Test visuel
+echo "📝 Contenu du log wget :"
+cat logs/model_download.log
+
 
 if [ -f "$MODEL_PATH" ]; then
   echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
