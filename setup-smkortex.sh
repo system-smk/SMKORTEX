@@ -31,30 +31,25 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 cd ../../../..
-# === Création du dossier du modèle ===
-mkdir -p llama/models
 
 ### 🦙 Téléchargement du modèle GGUF ###
 MODEL_NAME="vigogne-2-7b-chat.Q4_K_M.gguf"
 MODEL_PATH="llama/models/$MODEL_NAME"
 MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$MODEL_NAME"
 
-if [ ! -f "$MODEL_PATH" ]; then
-  echo "📥 Téléchargement du modèle Vigogne..."
-  wget "$MODEL_URL" -O "$MODEL_PATH"
+echo "📥 Téléchargement du modèle Vigogne..."
+mkdir -p llama/models
+wget "$MODEL_URL" -O "$MODEL_PATH"
 
-  if [ $? -eq 0 ]; then
-    echo "✅ Modèle téléchargé ➤ $MODEL_PATH"
-  else
-    echo "❌ Échec du téléchargement du modèle"
-    exit 1
-  fi
+if [ -f "$MODEL_PATH" ]; then
+  echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
 else
-  echo "✅ Modèle déjà présent ➤ $MODEL_PATH"
+  echo "❌ Échec du téléchargement. Fichier introuvable après wget."
+  exit 1
 fi
 
-### 📜 Scripts Bash (optionnel) ###
-echo "📜 Vérification des scripts Bash..."
+### 📜 Déploiement des scripts personnalisés (optionnel) ###
+echo "📜 Déploiement des scripts Bash..."
 for script in chatv2-kortex.sh front-smkortex.sh chat-smkortex.sh; do
   if [ -f "sources/$script" ]; then
     cp "sources/$script" scripts/
