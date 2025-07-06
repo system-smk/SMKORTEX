@@ -38,19 +38,18 @@ cd ../../../..
 MODEL_NAME="vigogne-2-7b-chat.Q4_K_M.gguf"
 MODEL_PATH="llama/models/$MODEL_NAME"
 MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$MODEL_NAME"
+LOG_PATH="logs/model_download.log"
 
 echo "📥 Téléchargement du modèle Vigogne..."
-mkdir -p llama/models
-wget "$MODEL_URL" -O "$MODEL_PATH" 2> logs/model_download.log
-# Test visuel
-echo "📝 Contenu du log wget :"
-cat logs/model_download.log
-
+mkdir -p llama/models logs
+touch "$LOG_PATH"
+wget "$MODEL_URL" -O "$MODEL_PATH" 2> "$LOG_PATH"
 
 if [ -f "$MODEL_PATH" ]; then
   echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
 else
-  echo "❌ Échec du téléchargement. Fichier introuvable après wget."
+  echo "❌ Échec du téléchargement. Détail du log :"
+  cat "$LOG_PATH"
   exit 1
 fi
 
