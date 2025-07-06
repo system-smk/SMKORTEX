@@ -111,16 +111,9 @@ bash scripts/desinstaller-smkortex.sh
 
 ### 💚 Auteur
 
-Projet piloté par **Mathieu-Karim**, avec l’IA locale SMKortex 🦙  
-Un assistant terminal qui rumine sans Cloud 🧠✨
 
----
-
-Tu veux aussi un `USAGE.md` ou un `SCRIPTS.md` avec des explications individuelles pour chaque module ? Je peux te préparer une documentation pro niveau GitHub Stars 🌟  
-Dis-moi comment tu veux le présenter au monde !
-
-💚 _Projet piloté avec passion
-By Mathieu-Karim & SMKortex
+💚 Projet piloté avec passion
+By Mathieu-Karim & Copilote
 
 
 
