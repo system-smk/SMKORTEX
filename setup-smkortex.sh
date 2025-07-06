@@ -22,15 +22,27 @@ cd llama/llama.cpp
 make
 cd ../../
 
-# === Téléchargement du modèle (Vigogne) ===
+# === Téléchargement du modèle Vigogne ===
 MODEL_FILE="llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+
 if [ ! -f "$MODEL_FILE" ]; then
   echo "📦 Téléchargement du modèle Vigogne (Q4_K_M)..."
-  curl -L -o "$MODEL_FILE" \
-    https://huggingface.co/bofenghuang/vigogne-2-7b-chat-GGUF/resolve/main/vigogne-2-7b-chat.Q4_K_M.gguf
+
+  wget -O "$MODEL_FILE" \
+    "https://huggingface.co/bofenghuang/vigogne-2-7b-chat-GGUF/resolve/main/vigogne-2-7b-chat.Q4_K_M.gguf?download=true"
+
+  # Vérifie que le téléchargement a réussi
+  if [ -f "$MODEL_FILE" ]; then
+    echo "✅ Modèle Vigogne téléchargé avec succès"
+  else
+    echo "❌ Échec du téléchargement. Vérifie ta connexion ou le lien Hugging Face."
+    exit 1
+  fi
+
 else
-  echo "✅ Modèle déjà présent"
+  echo "✅ Modèle déjà présent : $MODEL_FILE"
 fi
+
 
 # === Copie des scripts (depuis sources/) ===
 echo "📜 Installation des scripts bash..."
