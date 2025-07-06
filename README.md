@@ -1,74 +1,123 @@
-# 🤖 SMKortex — Assistant IA local en français
-
-Bienvenue dans ton assistant IA 100 % local, propulsé par `llama.cpp` + Vigogne 2.  
-Aucune connexion requise après installation. Juste toi, ton terminal, et ton copilote 🧠✨
+## 📘 README — SMKortex : Assistant IA local en français
 
 ---
 
-## 🚦 Étapes d’installation
+### 🤖 Présentation
 
-### ✅ Étape 1 — Lancer le script d’installation
+SMKortex est un assistant IA **100 % local** en français, basé sur `llama.cpp` et le modèle **Vigogne 2 7B**, conçu pour fonctionner sans connexion internet après installation.
+
+Il propose un setup **modulaire et automatisé**, avec des scripts organisés, une installation propre, et un raccourci terminal pour interagir facilement via `smkortex`.
+
+---
+
+### 🛠️ Prérequis
+
+Avant de commencer :
+
+- Linux ou macOS avec Bash
+- Git, Make et wget installés
+- CPU correct (ou GPU si intégré dans le futur)
+- ~4 Go d’espace libre pour le modèle
+
+---
+
+### 🚀 Installation complète
+
+#### ✅ Étape 1 — Cloner le dépôt
 
 ```bash
-./setup-smkortex.sh
+git clone https://github.com/ton-utilisateur/smkortex.git
+cd smkortex
 ```
 
-Ce script va :
+#### ✅ Étape 2 — Lancer le script principal
 
-- 📁 Créer les répertoires (`scripts/`, `logs/`, `llama/models/`, etc.)
-- 📦 Télécharger et compiler `llama.cpp`
-- 🧠 Télécharger le modèle `vigogne-2-7b-chat.Q4_K_M.gguf` (~3.9 Go)
-- 🧾 Installer les scripts dans `scripts/`
+```bash
+bash main-smkortex.sh
+```
+
+Ce script exécute les étapes suivantes dans cet ordre :
+
+| Étape | Script appelé | Action réalisée |
+|-------|---------------|------------------|
+| 1️⃣   | `install-dependances.sh`        | Installe les paquets nécessaires |
+| 2️⃣   | `clone-compile-llama.sh`        | Clone `llama.cpp` et compile `llama-cli` |
+| 3️⃣   | `telecharger-modele.sh`         | Télécharge Vigogne `.gguf` dans `llama/models/` |
+| 4️⃣   | `installer-chatv2.sh`           | Installe `instChatv2-kortex.sh` dans `scripts/` |
+| 5️⃣   | `configurer-lanceur.sh`         | Crée le raccourci global `smkortex` |
+| 6️⃣   | (option) `desinstaller-smkortex.sh` | Supprime tout proprement si choisi |
 
 ---
 
-## 🧱 Étape 2 — Vérification de l’arborescence attendue
-
-Avant de lancer le modèle, vérifie cette structure minimale :
+### 🧱 Structure attendue après installation
 
 ```
 SMKORTEX/
-├── setup-smkortex.sh
+├── main-smkortex.sh
 ├── scripts/
-│   └── chatv2-kortex.sh
+│   └── instChatv2-kortex.sh
 ├── llama/
-│   ├── llama.cpp/             ← Cloné automatiquement
-│   │   └── build/bin/llama-cli ← Binaire compilé
+│   ├── llama.cpp/
+│   │   └── build/bin/llama-cli
 │   └── models/
 │       └── vigogne-2-7b-chat.Q4_K_M.gguf
-├── logs/
-├── context.txt (optionnel)
-└── README.md / SCRIPTS.md
+├── logs/         ← sessions interactives ici
+├── config/       ← paramètres si nécessaires
+└── README.md
 ```
-
-> ✅ Vérifie que le modèle `.gguf` est bien dans `llama/models/`  
-> ✅ Vérifie que le script `chatv2-kortex.sh` pointe vers les bons chemins dans `MODEL` et `BIN`
 
 ---
 
-## 🚀 Étape 3 — Lancer SMKortex
+### 💬 Lancement de l’assistant IA
 
-Une fois l’installation et la structure vérifiées :
+Deux méthodes pour démarrer une session :
+
+#### 🔹 Méthode 1 — via le raccourci
 
 ```bash
-./scripts/chatv2-kortex.sh
+smkortex "Bonjour toi"
 ```
 
-Tu peux maintenant dialoguer avec SMKortex directement depuis ton terminal.
+#### 🔹 Méthode 2 — en lançant directement le script
+
+```bash
+bash scripts/instChatv2-kortex.sh
+```
+
+> Chaque session génère un log dans `logs/` avec horodatage complet.
 
 ---
 
-## 🧠 En cas d’erreur (checklist rapide)
+### 🧠 Problèmes fréquents
 
-| Problème détecté                      | Vérifie…                            |
-|--------------------------------------|-------------------------------------|
-| `invalid argument: --temperature`    | → utilise `--temp` à la place       |
-| `model not found`                    | → chemin `MODEL=./llama/models/...` |
-| `llama-cli: command not found`       | → `make` lancé dans `llama.cpp/`    |
-| Pas de réponse générée               | → prompt mal formé ou `tee -a` manquant |
-| Fichier modèle fait quelques Ko      | → téléchargement incomplet, à refaire |
+| Message d'erreur                     | Cause probable                         | Solution recommandée                |
+|-------------------------------------|----------------------------------------|-------------------------------------|
+| `llama-cli: command not found`      | Binaire non compilé                    | Relance `clone-compile-llama.sh`    |
+| `model not found`                   | Modèle absent ou chemin incorrect      | Vérifie dans `llama/models/`        |
+| `tee: logs/...log: Aucun fichier...`| Dossier `logs/` manquant               | Crée avec `mkdir -p logs`           |
+| Modèle fait quelques Ko seulement   | Téléchargement incomplet               | Relance `telecharger-modele.sh`     |
 
 ---
+
+### 📦 Désinstallation
+
+Si tu veux tout nettoyer :
+
+```bash
+bash scripts/desinstaller-smkortex.sh
+```
+
+---
+
+### 💚 Auteur
+
+Projet piloté par **Mathieu-Karim**, avec l’IA locale SMKortex 🦙  
+Un assistant terminal qui rumine sans Cloud 🧠✨
+
+---
+
+Tu veux aussi un `USAGE.md` ou un `SCRIPTS.md` avec des explications individuelles pour chaque module ? Je peux te préparer une documentation pro niveau GitHub Stars 🌟  
+Dis-moi comment tu veux le présenter au monde !
 
 💚 _Projet piloté avec passion
 By Mathieu-Karim & SMKortex
