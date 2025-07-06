@@ -2,7 +2,7 @@
 
 echo -e "\n🔗 Configuration du lanceur global 'smkortex'..."
 
-SOURCE="scripts/chatv2-kortex.sh"
+SOURCE="scripts/instChatv2-kortex.sh"
 TARGET="/usr/local/bin/smkortex"
 
 if [ -f "$SOURCE" ]; then
