@@ -1,15 +1,27 @@
 #!/bin/bash
 
-echo -e "\n📜 Installation du script chatv2-kortex.sh..."
+echo -e "\n📜 Installation du script instChatv2-kortex.sh..."
 
 SOURCE="instChatv2-kortex.sh"
-DEST="scripts/instChatv2-kortex.sh"
+DEST_DIR="scripts"
+DEST="$DEST_DIR/instChatv2-kortex.sh"
 
-if [ -f "$SOURCE" ]; then
-  cp "$SOURCE" "$DEST"
-  chmod +x "$DEST"
-  echo "✅ Script copié et activé ➤ $DEST"
-else
+# Vérifie que le fichier source existe
+if [ ! -f "$SOURCE" ]; then
   echo "❌ Fichier source '$SOURCE' introuvable ➤ place-le à la racine du projet"
   exit 1
 fi
+
+# Crée le dossier scripts/ s'il n'existe pas
+mkdir -p "$DEST_DIR"
+
+# Vérifie si le fichier destination existe déjà
+if [ -f "$DEST" ]; then
+  echo "⚠️ Le fichier '$DEST' existe déjà ➤ remplacement en cours..."
+fi
+
+# Copie + activation
+cp "$SOURCE" "$DEST"
+chmod +x "$DEST"
+echo "✅ Script copié et activé ➤ $DEST"
+
