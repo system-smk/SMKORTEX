@@ -2,8 +2,8 @@
 
 echo -e "\n📜 Installation du script chatv2-kortex.sh..."
 
-SOURCE="chatv2-kortex.sh"
-DEST="scripts/chatv2-kortex.sh"
+SOURCE="instChatv2-kortex.sh"
+DEST="scripts/instChatv2-kortex.sh"
 
 if [ -f "$SOURCE" ]; then
   cp "$SOURCE" "$DEST"
