@@ -23,25 +23,28 @@ make
 cd ../../
 
 # === Téléchargement du modèle Vigogne ===
-MODEL_FILE="llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+if [ ! -d "vigogne" ]; then
+  echo "📁 Clonage du dépôt Vigogne (prompts, scripts)..."
+  git clone https://github.com/bofenghuang/vigogne.git
+else
+  echo "✅ Dépôt Vigogne déjà présent"
+fi
 
-if [ ! -f "$MODEL_FILE" ]; then
-  echo "📦 Téléchargement du modèle Vigogne (Q4_K_M)..."
-
-  wget -O "$MODEL_FILE" \
+# === Téléchargement du modèle quantifié GGUF ===
+MODEL_PATH="llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+if [ ! -f "$MODEL_PATH" ]; then
+  echo "📦 Téléchargement du modèle GGUF (Vigogne Q4_K_M)..."
+  wget -O "$MODEL_PATH" \
     "https://huggingface.co/bofenghuang/vigogne-2-7b-chat-GGUF/resolve/main/vigogne-2-7b-chat.Q4_K_M.gguf?download=true"
 
-  # Vérifie que le téléchargement a réussi
-  if [ -f "$MODEL_FILE" ]; then
-    echo "✅ Modèle Vigogne téléchargé avec succès"
+  if [ $? -eq 0 ]; then
+    echo "✅ Modèle GGUF téléchargé ➤ $MODEL_PATH"
   else
-    echo "❌ Échec du téléchargement. Vérifie ta connexion ou le lien Hugging Face."
+    echo "❌ Échec du téléchargement."
     exit 1
   fi
-
 else
-  echo "✅ Modèle déjà présent : $MODEL_FILE"
-fi
+  echo "✅ Modèle GGUF déjà présent"
 
 
 # === Copie des scripts (depuis sources/) ===
