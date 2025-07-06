@@ -43,7 +43,18 @@ LOG_PATH="logs/model_download.log"
 echo "📥 Téléchargement du modèle Vigogne..."
 mkdir -p llama/models logs
 touch "$LOG_PATH"
-wget "$MODEL_URL" -O "$MODEL_PATH" 2> "$LOG_PATH"
+wget "$MODEL_URL" -O "$MODEL_PATH" &
+PID=$!
+
+spinner='|/-\'
+i=0
+while kill -0 $PID 2>/dev/null; do
+  i=$(( (i+1) %4 ))
+  printf "\r📥 Téléchargement en cours... ${spinner:$i:1}"
+  sleep 0.2
+done
+echo -e "\r✅ Téléchargement terminé                         "
+
 
 if [ -f "$MODEL_PATH" ]; then
   echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
