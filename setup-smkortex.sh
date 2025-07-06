@@ -5,7 +5,7 @@ echo "------------------------------------"
 
 ### 🔍 Dépendances système ###
 echo "📦 Vérification et installation des outils nécessaires..."
-REQUIRED_PKGS=(git cmake g++ wget build-essential libcurl4-openssl-dev ccache)
+REQUIRED_PKGS=(git cmake g++ wget build-essential libcurl4-openssl-dev ccache cmatrix)
 sudo apt update
 sudo apt install -y "${REQUIRED_PKGS[@]}"
 
@@ -40,40 +40,50 @@ MODEL_PATH="llama/models/$MODEL_NAME"
 MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$MODEL_NAME"
 LOG_PATH="logs/model_download.log"
 
+echo ""
 echo "📥 Téléchargement du modèle Vigogne..."
+echo "Merci pour votre patience, SMKortex prépare son esprit 🧠⏳"
+
 touch "$LOG_PATH"
 
-# 🔄 Téléchargement en arrière-plan avec redirection des erreurs
+# 🌀 Lance cmatrix en arrière-plan si installé
+if command -v cmatrix &> /dev/null; then
+  cmatrix -u 5 -C green &
+  CMATRIX_PID=$!
+else
+  echo "⚠️ cmatrix n'est pas installé (animation désactivée)"
+fi
+
+# 🎯 Téléchargement du modèle en arrière-plan
 wget "$MODEL_URL" -O "$MODEL_PATH" 2> "$LOG_PATH" &
-PID=$!
+WGET_PID=$!
 
-# 🎬 Spinner animé pendant le téléchargement
-spinner='|/-\'
-i=0
-while kill -0 $PID 2>/dev/null; do
-  printf "\r⏳ Téléchargement en cours... ${spinner:$i:1}"
-  i=$(( (i+1) %4 ))
-  sleep 0.2
-done
-echo -e "\r✅ Téléchargement terminé                         "
+# 🛑 Attend la fin du téléchargement
+wait $WGET_PID
 
-# 🔍 Vérifie si le fichier existe
+# 🧼 Stoppe cmatrix proprement
+if [ ! -z "$CMATRIX_PID" ]; then
+  kill "$CMATRIX_PID" 2>/dev/null
+  clear
+fi
+
+# 🔍 Vérification du fichier
 if [ ! -f "$MODEL_PATH" ]; then
-  echo "❌ Le fichier n'existe pas ➤ Échec du téléchargement."
+  echo "❌ Le modèle n'a pas été téléchargé ➤ Voir logs :"
   cat "$LOG_PATH"
   exit 1
 fi
 
-# 🧪 Vérifie si le fichier est une page HTML déguisée
+# 🧪 Vérifie si c’est une page HTML déguisée
 if file "$MODEL_PATH" | grep -qi html; then
-  echo "❌ Le fichier téléchargé semble être une page HTML, pas un modèle GGUF."
+  echo "❌ Le fichier téléchargé semble être une page HTML (non valide)"
   head "$MODEL_PATH"
   exit 1
 fi
 
 echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
 
-### 📜 Déploiement des scripts personnalisés (optionnel) ###
+### 📜 Déploiement des scripts personnalisés ###
 echo "📜 Déploiement des scripts Bash..."
 for script in chatv2-kortex.sh front-smkortex.sh chat-smkortex.sh; do
   if [ -f "sources/$script" ]; then
@@ -83,7 +93,18 @@ for script in chatv2-kortex.sh front-smkortex.sh chat-smkortex.sh; do
   fi
 done
 
-### 🧾 Terminé ###
+### 🚀 Création du lanceur global ###
+LAUNCHER="/usr/local/bin/smkortex"
+SCRIPT_PATH="$(pwd)/scripts/chatv2-kortex.sh"
+if [ -f "$SCRIPT_PATH" ]; then
+  echo "🚀 Création du lanceur global 'smkortex'..."
+  sudo ln -sf "$SCRIPT_PATH" "$LAUNCHER"
+  echo "✅ Tu peux maintenant lancer SMKortex depuis n'importe où ✨"
+else
+  echo "⚠️ Script principal introuvable ➤ pas de lanceur créé"
+fi
+
+### 🧾 Fin du setup ###
 echo ""
 echo "🎉 SMKortex est prêt à réfléchir !"
-echo "🧠 Lance : ./scripts/chatv2-kortex.sh \"Bonjour toi\""
+echo "🧠 Utilise : smkortex \"Bonjour toi\""
