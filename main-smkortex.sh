@@ -1,5 +1,19 @@
 #!/bin/bash
 
+echo -e "\n📁 Organisation des fichiers…"
+
+# Crée le dossier s'il n'existe pas
+mkdir -p scripts
+
+# Déplace les scripts dans le dossier scripts sauf ceux déjà dedans
+for FILE in *.sh; do
+  [[ "$FILE" == "main-smkortex.sh" ]] && continue
+  [[ -f "scripts/$FILE" ]] && continue
+  mv "$FILE" scripts/
+done
+
+echo "✅ Tous les scripts ont été déplacés dans ➤ ./scripts/"
+
 echo -e "\n🧠 Bienvenue dans SMKortex Setup"
 
 SCRIPTS=(install-dependances.sh clone-compile-llama.sh telecharger-modele.sh instChatv2-kortex.sh configurer-lanceur.sh desinstaller-smkortex.sh)
