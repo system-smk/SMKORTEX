@@ -31,6 +31,8 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 cd ../../../..
+# === Création du dossier du modèle ===
+mkdir -p llama/models
 
 ### 🦙 Téléchargement du modèle GGUF ###
 MODEL_NAME="vigogne-2-7b-chat.Q4_K_M.gguf"
