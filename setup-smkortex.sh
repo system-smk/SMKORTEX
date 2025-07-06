@@ -1,16 +1,20 @@
 #!/bin/bash
 
-echo "🧠 Installation complète de SMKortex"
-echo "------------------------------------"
+### 🎉 BANNIÈRE ASCII ###
+echo -e "\n\e[32m"
+echo "╔════════════════════════════════════╗"
+echo "║         🧠  SMKORTEX INSTALL       ║"
+echo "╚════════════════════════════════════╝"
+echo -e "\e[0m"
 
 ### 🔍 Dépendances système ###
-echo "📦 Vérification et installation des outils nécessaires..."
+echo "📦 Vérification des dépendances..."
 REQUIRED_PKGS=(git cmake g++ wget build-essential libcurl4-openssl-dev ccache cmatrix)
 sudo apt update
 sudo apt install -y "${REQUIRED_PKGS[@]}"
 
-### 📁 Préparation des dossiers ###
-echo "📁 Création des répertoires..."
+### 📁 Dossiers nécessaires ###
+echo "📁 Préparation des répertoires..."
 mkdir -p scripts logs llama/models
 
 ### 🧠 Clonage de llama.cpp ###
@@ -29,7 +33,7 @@ export CMAKE_C_COMPILER_LAUNCHER=ccache
 export CMAKE_CXX_COMPILER_LAUNCHER=ccache
 cmake .. && make -j$(nproc)
 if [ $? -ne 0 ]; then
-  echo "❌ Erreur de compilation de llama.cpp"
+  echo "❌ Compilation échouée"
   exit 1
 fi
 cd ../../../..
@@ -40,71 +44,67 @@ MODEL_PATH="llama/models/$MODEL_NAME"
 MODEL_URL="https://huggingface.co/TheBloke/Vigogne-2-7B-Chat-GGUF/resolve/main/$MODEL_NAME"
 LOG_PATH="logs/model_download.log"
 
-echo ""
-echo "📥 Téléchargement du modèle Vigogne..."
-echo "Merci pour votre patience, SMKortex prépare son esprit 🧠⏳"
+echo -e "\n📡 Téléchargement du modèle Vigogne..."
+echo "🧘‍♂️ Merci pour votre patience pendant que SMKortex médite..."
 
 touch "$LOG_PATH"
 
-# 🌀 Lance cmatrix en arrière-plan si installé
+# 🌀 Animation cmatrix pendant le téléchargement
 if command -v cmatrix &> /dev/null; then
   cmatrix -u 5 -C green &
   CMATRIX_PID=$!
-else
-  echo "⚠️ cmatrix n'est pas installé (animation désactivée)"
 fi
 
-# 🎯 Téléchargement du modèle en arrière-plan
 wget "$MODEL_URL" -O "$MODEL_PATH" 2> "$LOG_PATH" &
 WGET_PID=$!
-
-# 🛑 Attend la fin du téléchargement
 wait $WGET_PID
 
-# 🧼 Stoppe cmatrix proprement
+# 🛑 Stoppe cmatrix
 if [ ! -z "$CMATRIX_PID" ]; then
-  kill "$CMATRIX_PID" 2>/dev/null
+  kill $CMATRIX_PID 2>/dev/null
   clear
 fi
 
-# 🔍 Vérification du fichier
+# 📋 Vérifications
 if [ ! -f "$MODEL_PATH" ]; then
-  echo "❌ Le modèle n'a pas été téléchargé ➤ Voir logs :"
+  echo "❌ Modèle introuvable ➤ Voir logs :"
   cat "$LOG_PATH"
   exit 1
 fi
 
-# 🧪 Vérifie si c’est une page HTML déguisée
 if file "$MODEL_PATH" | grep -qi html; then
-  echo "❌ Le fichier téléchargé semble être une page HTML (non valide)"
+  echo "❌ Le fichier est une page HTML, pas un modèle GGUF"
   head "$MODEL_PATH"
   exit 1
 fi
 
-echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
+echo "✅ Modèle téléchargé ➤ $MODEL_PATH"
 
-### 📜 Déploiement des scripts personnalisés ###
-echo "📜 Déploiement des scripts Bash..."
+### 📜 Déploiement des scripts ###
+echo "📜 Installation des scripts personnalisés..."
 for script in chatv2-kortex.sh front-smkortex.sh chat-smkortex.sh; do
   if [ -f "sources/$script" ]; then
     cp "sources/$script" scripts/
     chmod +x "scripts/$script"
-    echo "✅ Script installé ➤ scripts/$script"
+    echo "✅ $script ➤ installé dans scripts/"
   fi
 done
 
-### 🚀 Création du lanceur global ###
+### 🚀 Lanceur global ###
 LAUNCHER="/usr/local/bin/smkortex"
 SCRIPT_PATH="$(pwd)/scripts/chatv2-kortex.sh"
 if [ -f "$SCRIPT_PATH" ]; then
-  echo "🚀 Création du lanceur global 'smkortex'..."
+  echo "🔗 Création du lanceur global : smkortex"
   sudo ln -sf "$SCRIPT_PATH" "$LAUNCHER"
-  echo "✅ Tu peux maintenant lancer SMKortex depuis n'importe où ✨"
+  echo "✅ Tu peux maintenant lancer SMKortex depuis n'importe où"
 else
-  echo "⚠️ Script principal introuvable ➤ pas de lanceur créé"
+  echo "⚠️ Script principal introuvable, lanceur non créé"
 fi
 
-### 🧾 Fin du setup ###
-echo ""
-echo "🎉 SMKortex est prêt à réfléchir !"
-echo "🧠 Utilise : smkortex \"Bonjour toi\""
+### 🎉 Fin de l'installation ###
+echo -e "\n\e[32m"
+echo "╔════════════════════════════════════╗"
+echo "║     🎉 SMKortex est prêt !        ║"
+echo "║  Lance : smkortex \"Bonjour toi\"  ║"
+echo "╚════════════════════════════════════╝"
+echo -e "\e[0m"
