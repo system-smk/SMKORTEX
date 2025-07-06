@@ -1,5 +1,8 @@
 #!/bin/bash
 
+### 📍 Démarrer depuis le dossier du script ###
+cd "$(dirname "$0")"
+
 ### 🎉 BANNIÈRE ASCII ###
 echo -e "\n\e[32m"
 echo "╔════════════════════════════════════╗"
@@ -61,11 +64,12 @@ wait $WGET_PID
 
 # 🛑 Stoppe cmatrix
 if [ ! -z "$CMATRIX_PID" ]; then
-  kill $CMATRIX_PID 2>/dev/null
+  kill "$CMATRIX_PID" 2>/dev/null
   clear
 fi
 
 # 📋 Vérifications
+echo "📁 Fichier attendu ➤ $MODEL_PATH"
 if [ ! -f "$MODEL_PATH" ]; then
   echo "❌ Modèle introuvable ➤ Voir logs :"
   cat "$LOG_PATH"
@@ -73,12 +77,12 @@ if [ ! -f "$MODEL_PATH" ]; then
 fi
 
 if file "$MODEL_PATH" | grep -qi html; then
-  echo "❌ Le fichier est une page HTML, pas un modèle GGUF"
+  echo "❌ Le fichier téléchargé est une page HTML, pas un modèle GGUF !"
   head "$MODEL_PATH"
   exit 1
 fi
 
-echo "✅ Modèle téléchargé ➤ $MODEL_PATH"
+echo "✅ Modèle téléchargé avec succès ➤ $MODEL_PATH"
 
 ### 📜 Déploiement des scripts ###
 echo "📜 Installation des scripts personnalisés..."
@@ -98,7 +102,7 @@ if [ -f "$SCRIPT_PATH" ]; then
   sudo ln -sf "$SCRIPT_PATH" "$LAUNCHER"
   echo "✅ Tu peux maintenant lancer SMKortex depuis n'importe où"
 else
-  echo "⚠️ Script principal introuvable, lanceur non créé"
+  echo "⚠️ Script principal introuvable ➤ lanceur non créé"
 fi
 
 ### 🎉 Fin de l'installation ###
