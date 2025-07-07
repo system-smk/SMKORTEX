@@ -133,7 +133,7 @@ Ou en BibTeX :
 
 ### 💚 Auteur
 
-Projet piloté avec passion par **Mathieu-Karim** & son Copilote local 🦙  
+Projet piloté avec passion par **Mathieu-Karim** & Copilote   
 Un assistant IA local, libre, hors cloud, et fier de parler français 🇫🇷✨
 
 
