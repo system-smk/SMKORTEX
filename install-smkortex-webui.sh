@@ -43,50 +43,48 @@ const { spawn } = require("child_process");
 const app = express();
 const PORT = 3000;
 
-// 📁 Dossier contenant index.html + assets (public/)
+// 📁 Dossier contenant index.html + styles
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// 🔁 Route POST /chat pour parler à Kortex
+// 🔁 Requête POST /chat ➤ envoie au script KORTEX
 app.post("/chat", (req, res) => {
   const userPrompt = req.body.prompt?.trim();
 
   if (!userPrompt) {
-    console.warn("❗ Aucune requête utilisateur reçue.");
-    return res.status(400).send("Prompt manquant");
+    return res.status(400).send("Aucun prompt reçu.");
   }
 
   const scriptPath = path.join(__dirname, "..", "scripts", "instChatv2-kortex.sh");
-  const process = spawn("bash", [scriptPath, userPrompt]);
+  const kortex = spawn("bash", [scriptPath, userPrompt]);
 
   let output = "";
   let errorOutput = "";
 
-  process.stdout.on("data", (data) => {
+  kortex.stdout.on("data", (data) => {
     output += data.toString();
   });
 
-  process.stderr.on("data", (data) => {
+  kortex.stderr.on("data", (data) => {
     errorOutput += data.toString();
   });
 
-  process.on("close", (code) => {
+  kortex.on("close", (code) => {
     if (code !== 0 || errorOutput) {
-      console.error("❌ Erreur dans SMKortex :", errorOutput);
-      return res.status(500).send("Erreur lors de l'exécution de Kortex.");
+      console.error("❌ Erreur depuis KORTEX :", errorOutput);
+      return res.status(500).send("Erreur KORTEX");
     }
 
-    const cleaned = output.trim();
-    console.log("✅ Réponse Kortex :", cleaned);
-    res.send(cleaned);
+    const response = output.trim();
+    console.log("✅ Réponse KORTEX :", response);
+    res.send(response);
   });
 });
 
-// 🚀 Lancement du serveur
+// 🚀 Démarrage serveur WebUI
 app.listen(PORT, () => {
-  console.log(`🌐 SMKortex WebUI dispo sur ➤ http://localhost:${PORT}`);
+  console.log(`🌐 Interface SMKORTEX dispo sur ➤ http://localhost:${PORT}`);
 });
-EOF
 
 # --- Interface web simple
 mkdir -p public
