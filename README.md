@@ -128,7 +128,7 @@ Ou en BibTeX :
   howpublished = {\url{https://github.com/bofenghuang/vigogne}},
 }
 ```
-
+> "SMKortex powered by Vigogne 🧠 — modèle conversationnel français par @bofenghuang"
 ---
 
 ### 💚 Auteur
@@ -136,9 +136,8 @@ Ou en BibTeX :
 Projet piloté avec passion par **Mathieu-Karim** & son Copilote local 🦙  
 Un assistant IA local, libre, hors cloud, et fier de parler français 🇫🇷✨
 
----
 
-Tu veux aussi que je t’ajoute un `CREDITS.md` séparé ou que je lie cette citation au nom du modèle dans les logs ? Je peux aussi intégrer ça dans l’intro interactive en mode :  
-> "SMKortex powered by Vigogne 🧠 — modèle conversationnel français par @bofenghuang"
 
-Tu me dis et je l’injecte !
+
+
+
