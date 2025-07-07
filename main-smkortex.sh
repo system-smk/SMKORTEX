@@ -34,7 +34,15 @@ read -p "👉 Choix [1/2] : " CH
 case "$CH" in
   1)
     bash scripts/install-dependances.sh
-    bash scripts/clone-compile-llama.sh
+
+    # 🧪 Vérifie et compile llama.cpp si absent
+    if [ ! -d "llama/llama.cpp" ]; then
+      echo -e "\n📦 Dépôt llama.cpp manquant ➤ lancement automatique du clonage + compilation"
+      bash scripts/clone-compile-llama.sh
+    else
+      echo -e "\n✅ Dépôt llama.cpp déjà présent ➤ compilation ignorée"
+    fi
+
     bash scripts/telecharger-modele.sh
     bash scripts/instChatv2-kortex.sh
     bash scripts/configurer-lanceur.sh
