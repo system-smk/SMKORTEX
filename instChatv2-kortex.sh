@@ -27,7 +27,7 @@ fi
 # 🔁 Session interactive
 while true; do
   read -p "Utilisateur : " PROMPT
-  echo -e "\n💬 Copilot répond..."
+  echo -e "\n💬 KORTEX répond..."
   echo "Utilisateur : $PROMPT" | tee -a "$LOGFILE"
 
   "$BIN" \
@@ -40,7 +40,7 @@ while true; do
     --n_predict 256 \
     --color \
     --seed -1 \
-    --prompt "Utilisateur : $PROMPT\nCopilot : " | tee -a "$LOGFILE"
+    --prompt "Utilisateur : $PROMPT\nKORTEX : " | tee -a "$LOGFILE"
 
   echo "" >> "$LOGFILE"
 done
