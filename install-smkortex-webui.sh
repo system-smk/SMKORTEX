@@ -38,24 +38,53 @@ echo -e "\n🧠 Création des fichiers server.js et index.html..."
 cat > server.js <<EOF
 const express = require("express");
 const path = require("path");
-const { exec } = require("child_process");
+const { spawn } = require("child_process");
 
 const app = express();
 const PORT = 3000;
 
+// 📁 Dossier contenant index.html + assets (public/)
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
+// 🔁 Route POST /chat pour parler à Kortex
 app.post("/chat", (req, res) => {
-  const userPrompt = req.body.prompt;
-  exec(\`./scripts/chatv2-kortex.sh "\${userPrompt}"\`, (err, stdout) => {
-    if (err) return res.status(500).send("Erreur de SMKortex");
-    res.send(stdout);
+  const userPrompt = req.body.prompt?.trim();
+
+  if (!userPrompt) {
+    console.warn("❗ Aucune requête utilisateur reçue.");
+    return res.status(400).send("Prompt manquant");
+  }
+
+  const scriptPath = path.join(__dirname, "..", "scripts", "instChatv2-kortex.sh");
+  const process = spawn("bash", [scriptPath, userPrompt]);
+
+  let output = "";
+  let errorOutput = "";
+
+  process.stdout.on("data", (data) => {
+    output += data.toString();
+  });
+
+  process.stderr.on("data", (data) => {
+    errorOutput += data.toString();
+  });
+
+  process.on("close", (code) => {
+    if (code !== 0 || errorOutput) {
+      console.error("❌ Erreur dans SMKortex :", errorOutput);
+      return res.status(500).send("Erreur lors de l'exécution de Kortex.");
+    }
+
+    const cleaned = output.trim();
+    console.log("✅ Réponse Kortex :", cleaned);
+    res.send(cleaned);
   });
 });
 
+// 🚀 Lancement du serveur
 app.listen(PORT, () => {
-  console.log(\`🌐 SMKortex WebUI disponible sur http://localhost:\${PORT}\`);
+  console.log(`🌐 SMKortex WebUI dispo sur ➤ http://localhost:${PORT}`);
 });
 EOF
 
