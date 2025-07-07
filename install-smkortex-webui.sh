@@ -43,18 +43,20 @@ const { spawn } = require("child_process");
 const app = express();
 const PORT = 3000;
 
-// 📁 Dossier contenant index.html + styles
+// 📁 Sert le dossier public (HTML/CSS/JS)
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 
-// 🔁 Requête POST /chat ➤ envoie au script KORTEX
+// 🔁 Requête POST /chat ➤ appelle KORTEX
 app.post("/chat", (req, res) => {
   const userPrompt = req.body.prompt?.trim();
 
   if (!userPrompt) {
+    console.warn("❗ Aucun prompt fourni.");
     return res.status(400).send("Aucun prompt reçu.");
   }
 
+  // 🔗 Chemin vers le script shell KORTEX
   const scriptPath = path.join(__dirname, "..", "scripts", "instChatv2-kortex.sh");
   const kortex = spawn("bash", [scriptPath, userPrompt]);
 
@@ -70,20 +72,21 @@ app.post("/chat", (req, res) => {
   });
 
   kortex.on("close", (code) => {
-    if (code !== 0 || errorOutput) {
-      console.error("❌ Erreur depuis KORTEX :", errorOutput);
+    const response = output.trim();
+
+    if (code !== 0) {
+      console.error("❌ KORTEX a échoué :", errorOutput);
       return res.status(500).send("Erreur KORTEX");
     }
 
-    const response = output.trim();
     console.log("✅ Réponse KORTEX :", response);
     res.send(response);
   });
 });
 
-// 🚀 Démarrage serveur WebUI
+// 🚀 Lance le serveur
 app.listen(PORT, () => {
-  console.log(`🌐 Interface SMKORTEX dispo sur ➤ http://localhost:${PORT}`);
+  console.log(`🌐 SMKORTEX WebUI dispo sur ➤ http://localhost:${PORT}`);
 });
 
 # --- Interface web simple
