@@ -3,11 +3,10 @@
 # 📁 Base absolue du projet
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 
-echo -e "\n🧠 SMKortex v2 — Session interactive"
-mkdir -p "$ROOTDIR/logs"
 
-TIMESTAMP=$(date +"%H-%M_%d-%m-%Y")
-LOGFILE="$ROOTDIR/logs/session_$TIMESTAMP.log"
+mkdir -p "$ROOTDIR/logs"
+LOGFILE="$ROOTDIR/logs/session_$(date +"%H-%M_%d-%m-%Y").log"
+
 echo "📅 Log : $LOGFILE"
 echo "✏️  Ctrl+C pour quitter"
 
