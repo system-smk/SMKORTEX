@@ -11,7 +11,7 @@ LOGFILE="$ROOTDIR/logs/session_$TIMESTAMP.log"
 echo "📅 Log : $LOGFILE"
 echo "✏️  Ctrl+C pour quitter"
 
-MODEL="$ROOTDIR/llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+MODEL="$ROOTDIR/llama/models/model.gguf"
 BIN="$ROOTDIR/llama/llama.cpp/build/bin/llama-cli"
 
 # 🔍 Vérifications
