@@ -1,19 +1,18 @@
 #!/bin/bash
 
+# 📁 Base absolue du projet
+ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
+
 echo -e "\n🧠 SMKortex v2 — Session interactive"
+mkdir -p "$ROOTDIR/logs"
 
-# 📁 Préparation du dossier de logs (à la racine)
-mkdir -p ../logs
-
-# 🗓️ Horodatage pour nom de session
 TIMESTAMP=$(date +"%H-%M_%d-%m-%Y")
-LOGFILE="../logs/session_$TIMESTAMP.log"
+LOGFILE="$ROOTDIR/logs/session_$TIMESTAMP.log"
 echo "📅 Log : $LOGFILE"
 echo "✏️  Ctrl+C pour quitter"
 
-# 🧠 Chemins du modèle et du binaire
-MODEL="../llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
-BIN="../llama/llama.cpp/build/bin/llama-cli"
+MODEL="$ROOTDIR/llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+BIN="$ROOTDIR/llama/llama.cpp/build/bin/llama-cli"
 
 # 🔍 Vérifications
 if [ ! -f "$BIN" ]; then
@@ -29,7 +28,7 @@ fi
 # 🔁 Session interactive
 while true; do
   read -p "Utilisateur : " PROMPT
-  echo -e "\n💬 SMKortex répond..."
+  echo -e "\n💬 Copilot répond..."
   echo "Utilisateur : $PROMPT" | tee -a "$LOGFILE"
 
   "$BIN" \
@@ -42,8 +41,9 @@ while true; do
     --n_predict 256 \
     --color \
     --seed -1 \
-    --prompt "Utilisateur : $PROMPT\nSMKortex : " | tee -a "$LOGFILE"
+    --prompt "Utilisateur : $PROMPT\nCopilot : " | tee -a "$LOGFILE"
 
   echo "" >> "$LOGFILE"
 done
+
 
