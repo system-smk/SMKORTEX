@@ -14,7 +14,7 @@ done
 
 echo "✅ Tous les scripts ont été déplacés dans ➤ ./scripts/"
 
-echo -e "\n🧠 Bienvenue dans SMKortex Setup"
+echo -e "\n🧠 Bienvenue dans Copilot Setup"
 
 SCRIPTS=(install-dependances.sh clone-compile-llama.sh telecharger-modele.sh instChatv2-kortex.sh configurer-lanceur.sh desinstaller-smkortex.sh)
 
@@ -27,8 +27,8 @@ for file in "${SCRIPTS[@]}"; do
 done
 
 echo -e "\n📦 Que souhaitez-vous faire ?"
-echo "1. Installer SMKortex 🧠"
-echo "2. Désinstaller SMKortex 🧹"
+echo "1. Installer Copilot local 🧠"
+echo "2. Désinstaller Copilot 🧹"
 read -p "👉 Choix [1/2] : " CH
 
 case "$CH" in
@@ -43,10 +43,19 @@ case "$CH" in
       echo -e "\n✅ Dépôt llama.cpp déjà présent ➤ compilation ignorée"
     fi
 
-    bash scripts/telecharger-modele.sh
+    # 🧪 Vérifie si le modèle est présent
+    MODEL_PATH="llama/models/vigogne-2-7b-chat.Q4_K_M.gguf"
+    if [ ! -f "$MODEL_PATH" ]; then
+      echo -e "\n📡 Modèle Vigogne manquant ➤ téléchargement automatique"
+      bash scripts/telecharger-modele.sh
+    else
+      echo "✅ Modèle déjà présent ➤ pas de téléchargement nécessaire"
+    fi
+
     bash scripts/instChatv2-kortex.sh
     bash scripts/configurer-lanceur.sh
-    echo -e "\n🎉 SMKortex est prêt ➤ utilise : smkortex \"Bonjour toi\" 🦙"
+
+    echo -e "\n🎉 Copilot est prêt ➤ utilise : copilot \"Bonjour toi\" 🦙"
     ;;
   2)
     bash scripts/desinstaller-smkortex.sh
@@ -56,3 +65,4 @@ case "$CH" in
     exit 1
     ;;
 esac
+
