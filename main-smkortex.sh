@@ -27,8 +27,8 @@ for file in "${SCRIPTS[@]}"; do
 done
 
 echo -e "\n📦 Que souhaitez-vous faire ?"
-echo "1. Installer Copilot local 🧠"
-echo "2. Désinstaller Copilot 🧹"
+echo "1. Installer KORTEX local 🧠"
+echo "2. Désinstaller KORTEX 🧹"
 read -p "👉 Choix [1/2] : " CH
 
 case "$CH" in
