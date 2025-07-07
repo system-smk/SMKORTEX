@@ -233,7 +233,7 @@ cat > public/index.html <<EOF
 EOF
 
 # --- README
-cat > README.md <<EOF
+cat > READMEWEBUI.md <<EOF
 # 🌐 SMKortex WebUI (Node.js)
 
 Interface web locale pour discuter avec SMKortex via un serveur Node.js.
