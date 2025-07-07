@@ -1,31 +1,28 @@
 #!/bin/bash
 
-echo -e "\n📦 Installation des dépendances pour SMKortex..."
+echo -e "\n📦 Clonage et compilation de llama.cpp..."
 
-### Choix d'ambiance terminal
-echo -e "\n🎛️ Choisissez votre ambiance :"
-echo "1. Classique ➤ progression visible"
-echo "2. Animation ➤ cmatrix uniquement"
-echo "3. Mixte ➤ cmatrix + logs via tmux"
-read -p "👉 Votre choix [1/2/3] : " USER_CHOICE
+# 📁 Création du dossier parent
+mkdir -p llama
 
-echo -e "\n🔄 Mise à jour et installation des packages..."
-sudo apt update
-sudo apt install -y git cmake g++ wget build-essential libcurl4-openssl-dev ccache
-
-[[ "$USER_CHOICE" == "2" || "$USER_CHOICE" == "3" ]] && sudo apt install -y cmatrix
-
-if [[ "$USER_CHOICE" == "3" ]]; then
-  if ! command -v tmux &> /dev/null; then
-    read -p "👉 Installer tmux pour activer le mode mixte ? [o/N] : " INSTALL_TMUX
-    [[ "$INSTALL_TMUX" =~ ^[oO]$ ]] && sudo apt install -y tmux || USER_CHOICE="1"
-  else
-    echo "✅ tmux est déjà installé"
-  fi
+# 📦 Clonage du dépôt si absent
+if [ ! -d "llama/llama.cpp" ]; then
+  echo "🔗 Clonage de llama.cpp depuis GitHub..."
+  git clone https://github.com/ggerganov/llama.cpp.git llama/llama.cpp
+else
+  echo "✅ llama.cpp déjà cloné ➤ passage à la compilation"
 fi
 
-### Sauvegarde du choix d’ambiance pour les autres scripts
-mkdir -p config
-echo "$USER_CHOICE" > config/ambiance.txt
+# 🛠 Compilation si le binaire est absent
+if [ ! -f "llama/llama.cpp/build/bin/llama-cli" ]; then
+  echo "🔨 Compilation de llama.cpp..."
+  cd llama/llama.cpp
+  mkdir -p build
+  cd build
+  cmake ..
+  make -j$(nproc)
+  echo "✅ Compilation réussie ➤ llama/llama.cpp/build/bin/llama-cli"
+else
+  echo "✅ Binaire déjà compilé ➤ rien à faire"
+fi
 
-echo -e "\n✅ Dépendances installées et ambiance définie 💚"
