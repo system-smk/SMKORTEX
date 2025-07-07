@@ -38,13 +38,13 @@ fi
   --threads 6 \
   --temp 0.6 \
   --repeat_penalty 1.15 \
-  --top_k 50 \
-  --top_p 0.95 \
-  --n_predict 384 \
+  --top_k 42 \
+  --top_p 0.9 \
+  --n_predict 256 \
   --ctx-size 4096 \
   --no-mmap \
   --seed -1 \
-  --prompt "La conversation suivante est entre un Utilisateur et KORTEX, un assistant IA francophone bienveillant.\nUtilisateur :" \
+  --prompt "La conversation suivante est entre un Utilisateur et KORTEX, un assistant IA francophone bienveillant." \
   --interactive \
   --reverse-prompt "Utilisateur :" \
   | tee -a "$LOGFILE"
