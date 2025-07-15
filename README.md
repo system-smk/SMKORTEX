@@ -79,12 +79,10 @@ webkortex
 
 > Lance le serveur à l'adresse : [http://localhost:3000](http://localhost:3000)
 
-#### 🔹 Interface intuitive
+#### 🔹 Interface 
 
 - Champ texte pour poser tes questions
 - Bouton **“Parler à Kortex”**
-- Réponses affichées dans des bulles personnalisées
-- Effets visuels (particules interactives, animations cosmique)
 
 ---
 
