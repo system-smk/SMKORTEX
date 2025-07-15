@@ -1,23 +1,23 @@
-## 📘 README — SMKortex : Assistant IA local en français
+## 📘 README — SMKortex : Assistant IA local en français + Interface WebUI
 
 ---
 
 ### 🤖 Présentation
 
-SMKortex est un assistant IA **100 % local** en français, basé sur `llama.cpp` et le modèle **Vigogne 2 7B**, conçu pour fonctionner sans connexion internet après installation.
+SMKortex est un assistant IA **100 % local**, conçu pour fonctionner sans connexion internet après installation. Il utilise `llama.cpp` associé au modèle **Vigogne 2 7B**, optimisé pour la conversation en français.
 
-Il propose un setup **modulaire et automatisé**, avec des scripts organisés, une installation propre, et un raccourci terminal pour interagir facilement via `smkortex`.
+💡 Il propose deux modes d’interaction :
+- Terminal classique (`smkortex`)
+- Interface Web interactive (`WebUI`) avec champ texte, bulles et animation cosmique
 
 ---
 
 ### 🛠️ Prérequis
 
-Avant de commencer :
-
 - Linux ou macOS avec Bash
-- Git, Make et wget installés
-- CPU correct (ou GPU si intégré dans le futur)
+- Git, Make, wget et Node.js installés
 - ~4 Go d’espace libre pour le modèle
+- Navigateur moderne pour la WebUI
 
 ---
 
@@ -36,72 +36,94 @@ cd smkortex
 bash main-smkortex.sh
 ```
 
-Ce script exécute les étapes suivantes dans cet ordre :
+Ce script installe automatiquement :
 
-| Étape | Script appelé                  | Action réalisée                                      |
-|-------|--------------------------------|------------------------------------------------------|
-| 1️⃣   | `install-dependances.sh`       | Installe les paquets nécessaires                     |
-| 2️⃣   | `clone-compile-llama.sh`       | Clone `llama.cpp` et compile `llama-cli`            |
-| 3️⃣   | `telecharger-modele.sh`        | Télécharge Vigogne `.gguf` dans `llama/models/`     |
-| 4️⃣   | `installer-chatv2.sh`          | Installe `instChatv2-kortex.sh` dans `scripts/`     |
-| 5️⃣   | `configurer-lanceur.sh`        | Crée le raccourci global `smkortex`                 |
-| 6️⃣   | *(option)* `desinstaller-smkortex.sh` | Supprime tout proprement si choisi         |
+| Étape | Script appelé                         | Action réalisée                                          |
+|-------|----------------------------------------|----------------------------------------------------------|
+| 1️⃣   | `install-dependances.sh`               | Installe les paquets nécessaires                         |
+| 2️⃣   | `clone-compile-llama.sh`               | Clone `llama.cpp` et compile `llama-cli`                |
+| 3️⃣   | `telecharger-modele.sh`                | Télécharge Vigogne `.gguf` dans `llama/models/`         |
+| 4️⃣   | `instChatv2-kortex.sh`                 | Configure l’agent IA Shell local                        |
+| 5️⃣   | `configurer-lanceur.sh`                | Crée le raccourci terminal `smkortex`                   |
+| 6️⃣   | `install-smkortex-webui.sh`            | Crée l’interface WebUI dans `webui/`                    |
+| 7️⃣   | `configurer-lanceur-webui.sh`          | Crée le raccourci terminal `webkortex`                  |
+| 🧹   | *(option)* `desinstaller-smkortex.sh`   | Supprime proprement tout le projet                     |
 
 ---
 
-### 🧱 Structure attendue après installation
+### 💬 Utilisation en ligne de commande
+
+#### 🔹 Méthode 1 — raccourci terminal
+
+```bash
+smkortex "Quel est le sens de la vie ?"
+```
+
+#### 🔹 Méthode 2 — lancer le script directement
+
+```bash
+bash scripts/instChatv2-kortex.sh
+```
+
+> Les réponses s'affichent en direct, et chaque session est loguée dans `logs/`.
+
+---
+
+### 🌐 Utilisation via Interface WebUI
+
+#### 🔹 Démarrer le serveur Web :
+
+```bash
+webkortex
+```
+
+> Lance le serveur à l'adresse : [http://localhost:3000](http://localhost:3000)
+
+#### 🔹 Interface intuitive
+
+- Champ texte pour poser tes questions
+- Bouton **“Parler à Kortex”**
+- Réponses affichées dans des bulles personnalisées
+- Effets visuels (particules interactives, animations cosmique)
+
+---
+
+### 🧱 Arborescence finale attendue
 
 ```
 SMKORTEX/
 ├── main-smkortex.sh
 ├── scripts/
 │   └── instChatv2-kortex.sh
+│   └── install-smkortex-webui.sh
 ├── llama/
-│   ├── llama.cpp/
-│   │   └── build/bin/llama-cli
+│   └── llama.cpp/
 │   └── models/
-│       └── vigogne-2-7b-chat.Q4_K_M.gguf
-├── logs/         ← sessions interactives ici
-├── config/       ← paramètres si nécessaires
+├── webui/
+│   ├── server.js
+│   └── public/
+│       ├── index.html
+│       ├── style.css
+│       └── app.js
+├── logs/
 └── README.md
 ```
 
 ---
 
-### 💬 Lancement de l’assistant IA
-
-Deux méthodes pour démarrer une session :
-
-#### 🔹 Méthode 1 — via le raccourci
-
-```bash
-smkortex "Bonjour toi"
-```
-
-#### 🔹 Méthode 2 — en lançant directement le script
-
-```bash
-bash scripts/instChatv2-kortex.sh
-```
-
-> Chaque session génère un log dans `logs/` avec horodatage complet.
-
----
-
 ### 🧠 Problèmes fréquents
 
-| Message d'erreur                          | Cause probable                         | Solution recommandée              |
-|------------------------------------------|----------------------------------------|-----------------------------------|
-| `llama-cli: command not found`           | Binaire non compilé                    | Relance `clone-compile-llama.sh`  |
-| `model not found`                        | Modèle absent ou chemin incorrect      | Vérifie dans `llama/models/`      |
-| `tee: logs/...log: Aucun fichier...`     | Dossier `logs/` manquant               | Crée avec `mkdir -p logs`         |
-| Modèle fait quelques Ko seulement        | Téléchargement incomplet               | Relance `telecharger-modele.sh`   |
+| Message d'erreur                          | Cause probable                      | Solution recommandée              |
+|------------------------------------------|-------------------------------------|-----------------------------------|
+| `llama-cli: command not found`           | Binaire non compilé                 | Relancer `clone-compile-llama.sh` |
+| `model not found`                        | Modèle absent ou incorrect          | Vérifier `llama/models/`          |
+| `tee: logs/...log: Aucun fichier...`     | Dossier `logs/` manquant            | Créer avec `mkdir -p logs`        |
+| WebUI répond mais n’affiche rien         | Script ne renvoie rien              | Vérifier `echo` dans le script IA |
+| `node: command not found`                | Node.js manquant                    | Installer avec `apt install nodejs npm` |
 
 ---
 
-### 📦 Désinstallation
-
-Si tu veux tout nettoyer proprement :
+### 🧹 Désinstallation
 
 ```bash
 bash scripts/desinstaller-smkortex.sh
@@ -109,14 +131,12 @@ bash scripts/desinstaller-smkortex.sh
 
 ---
 
-### 📚 Crédits & citation du modèle
+### 🧠 Attribution et citation du modèle
 
-SMKortex repose sur le modèle **Vigogne**, développé pour l’instruction et la conversation en français.  
-Si vous utilisez ce projet dans un cadre académique ou technique, veuillez citer leurs travaux comme suit :
+SMKORTEX repose sur le modèle **Vigogne** :
 
-> Huang, B. (2023). *Vigogne: French Instruction-following and Chat Models* [GitHub repository]. GitHub. https://github.com/bofenghuang/vigogne
-
-Ou en BibTeX :
+> Huang, B. (2023). *Vigogne: French Instruction-following and Chat Models*  
+> [GitHub repository](https://github.com/bofenghuang/vigogne)
 
 ```bibtex
 @misc{vigogne,
@@ -128,16 +148,12 @@ Ou en BibTeX :
   howpublished = {\url{https://github.com/bofenghuang/vigogne}},
 }
 ```
-> "SMKortex powered by Vigogne 🧠 — modèle conversationnel français par @bofenghuang"
+> "SMKORTEX powered by Vigogne 🧠 — modèle conversationnel français par @bofenghuang"
+
 ---
 
 ### 💚 Auteur
 
-Projet piloté avec passion par **Mathieu-Karim** & Copilote   
-Un assistant IA local, libre, hors cloud, et fier de parler français 🇫🇷✨
-
-
-
-
-
+Projet pensé, organisé et piloté par **Mathieu-Karim**,  
+assisté par son fidèle copilote IA ✨  
 
