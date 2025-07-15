@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#!/bin/bash
-
 # === 📁 Résolution robuste du chemin racine
 SCRIPT_SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SCRIPT_SOURCE" ]; do
