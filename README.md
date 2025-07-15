@@ -155,5 +155,5 @@ SMKORTEX repose sur le modèle **Vigogne** :
 ### 💚 Auteur
 
 Projet pensé, organisé et piloté par **Mathieu-Karim**,  
-assisté par son fidèle copilote IA ✨  
+assisté par Copilot ✨  
 
