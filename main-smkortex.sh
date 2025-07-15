@@ -54,6 +54,7 @@ case "$CH" in
 
     bash scripts/instChatv2-kortex.sh
     bash scripts/configurer-lanceur.sh
+    bash scripts/configurer-lanceur-webui.sh
 
     echo -e "\n🎉 Copilot est prêt ➤ utilise : copilot \"Bonjour toi\" 🦙"
     ;;
