@@ -1,20 +1,32 @@
 #!/bin/bash
 
-echo -e "\n⚙️ Création du raccourci smkortex dans /usr/local/bin (sudo nécessaire)"
+echo -e "\n⚙️ Installation du lanceur smkortex dans ~/.local/bin"
 
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
 SOURCE="$ROOTDIR/scripts/instChatv2-kortex.sh"
-TARGET="/usr/local/bin/smkortex"
+TARGET="$HOME/.local/bin/smkortex"
 
-# Vérifie la source
+# Vérifie le script source
 if [ ! -f "$SOURCE" ]; then
-  echo "❌ instChatv2-kortex.sh introuvable ➤ vérifie l’installation"
+  echo "❌ Script de lancement introuvable ➤ $SOURCE"
   exit 1
 fi
 
-# Copie avec élévation
-sudo cp "$SOURCE" "$TARGET"
-sudo chmod +x "$TARGET"
+# Crée le dossier cible et copie le lanceur
+mkdir -p "$TARGET" 2>/dev/null || {
+  echo "❌ Impossible de créer le répertoire ➤ vérifie les permissions ou évite sudo"
+  exit 1
+}
 
-echo "✅ Lanceur système 'smkortex' disponible ➤ tape simplement : smkortex"
+cp "$SOURCE" "$TARGET"
+chmod +x "$TARGET"
+
+# Corrige le PATH si nécessaire
+if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+  source ~/.bashrc
+  echo "🔧 PATH mis à jour pour inclure ~/.local/bin"
+fi
+
+echo "✅ Lanceur installé ➤ Utilisez-le avec la commande : smkortex"
 
