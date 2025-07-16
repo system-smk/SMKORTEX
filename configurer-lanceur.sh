@@ -13,10 +13,8 @@ if [ ! -f "$SOURCE" ]; then
 fi
 
 # Crée le dossier cible et copie le lanceur
-mkdir -p "$TARGET" 2>/dev/null || {
-  echo "❌ Impossible de créer le répertoire ➤ vérifie les permissions ou évite sudo"
-  exit 1
-}
+mkdir -p "$HOME/.local/bin"
+
 
 cp "$SOURCE" "$TARGET"
 chmod +x "$TARGET"
