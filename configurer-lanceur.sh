@@ -1,30 +1,29 @@
-# Ajoute ce bloc dans l’installeur, à la fin ⬇️
-echo -e "\n⚙️ Installation du raccourci smkortex..."
-sudo tee /usr/local/bin/smkortex > /dev/null <<'EOF'
 #!/bin/bash
 
-SCRIPT_SOURCE="${BASH_SOURCE[0]}"
-while [ -h "$SCRIPT_SOURCE" ]; do
-  DIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")" >/dev/null 2>&1 && pwd)"
-  SCRIPT_SOURCE="$(readlink "$SCRIPT_SOURCE")"
-  [[ $SCRIPT_SOURCE != /* ]] && SCRIPT_SOURCE="$DIR/$SCRIPT_SOURCE"
-done
-ROOTDIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")/.." >/dev/null 2>&1 && pwd)"
+echo -e "\n⚙️ Installation du lanceur smkortex (nécessite sudo)"
 
-mkdir -p "$ROOTDIR/logs"
-LOGFILE="$ROOTDIR/logs/session_$(date +"%H-%M_%d-%m-%Y").log"
+read -p "👉 Souhaitez-vous installer le lanceur dans /usr/local/bin ? [o/n] : " OK
+if [[ "$OK" =~ ^[Oo]$ ]]; then
+  sudo bash -c 'cat > /usr/local/bin/smkortex' <<'EOF'
+#!/bin/bash
+
+ROOTDIR="$(dirname "$(realpath "$0")")/../.."
+LOGDIR="$ROOTDIR/logs"
+mkdir -p "$LOGDIR"
+LOGFILE="$LOGDIR/session_$(date +"%H-%M_%d-%m-%Y").log"
+
 MODEL="$ROOTDIR/llama/models/model.gguf"
 BIN="$ROOTDIR/llama/llama.cpp/build/bin/llama-cli"
 
-echo "📦 Projet : $ROOTDIR"
-echo "📅 Log    : $LOGFILE"
-echo "⚡ KORTEX session RAM boostée"
+if [ ! -f "$BIN" ] || [ ! -f "$MODEL" ]; then
+  echo "❌ Le binaire ou le modèle est manquant"
+  exit 1
+fi
 
-if [ ! -f "$BIN" ]; then echo "❌ Binaire manquant ➤ compile-le"; exit 1; fi
-if [ ! -f "$MODEL" ]; then echo "❌ Modèle manquant ➤ télécharge-le"; exit 1; fi
-
+echo "🧠 Lancement KORTEX ➤ $(date)"
 "$BIN" \
   --model "$MODEL" \
+  --interactive \
   --color \
   --threads $(nproc) \
   --temp 0.7 \
@@ -34,10 +33,13 @@ if [ ! -f "$MODEL" ]; then echo "❌ Modèle manquant ➤ télécharge-le"; exit
   --n_predict 256 \
   --seed -1 \
   --prompt "La conversation suivante est entre un Utilisateur et KORTEX, un assistant IA francophone bienveillant.\nUtilisateur :" \
-  --interactive \
   --reverse-prompt "Utilisateur :" \
   | tee -a "$LOGFILE"
 EOF
 
-sudo chmod +x /usr/local/bin/smkortex
+  sudo chmod +x /usr/local/bin/smkortex
+  echo "✅ Lanceur installé ➤ utilisez : smkortex \"Bonjour toi\""
+else
+  echo "❌ Installation du lanceur annulée"
+fi
 
