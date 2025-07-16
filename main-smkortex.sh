@@ -33,6 +33,8 @@ for file in "${SCRIPTS[@]}"; do
     exit 1
   fi
 done
+# 🛡️ Vérification et correction du PATH
+bash scripts/kortex-path-check.sh
 
 mkdir -p ~/.local/bin
 if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
