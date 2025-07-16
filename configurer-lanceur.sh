@@ -1,28 +1,45 @@
 #!/bin/bash
 
-echo -e "\n⚙️ Ajout du lanceur 'smkortex' dans ~/.bashrc"
+echo -e "\n⚙️ Installation du lanceur 'smkortex' dans ~/.local/bin"
 
+# 🧭 Détection du dossier racine du projet
 ROOTDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")"/.. && pwd)"
-TARGET="$ROOTDIR/scripts/instChatv2-kortex.sh"
 
-# 🔍 Vérifie que le script existe
-if [ ! -f "$TARGET" ]; then
-  echo "❌ Script de lancement introuvable ➤ $TARGET"
+# 📁 Script source et chemin de destination
+SOURCE="$ROOTDIR/scripts/instChatv2-kortex.sh"
+TARGET="$HOME/.local/bin/smkortex"
+
+# 🔍 Vérifie que le script source existe
+if [ ! -f "$SOURCE" ]; then
+  echo "❌ Le script source est introuvable ➤ $SOURCE"
   exit 1
 fi
 
-# 🧾 Crée un alias dans .bashrc s'il n'existe pas déjà
-if ! grep -q 'alias smkortex=' "$HOME/.bashrc"; then
-  echo "alias smkortex='bash \"$TARGET\"'" >> "$HOME/.bashrc"
-  echo "✅ Alias ajouté dans ~/.bashrc ➤ tape : smkortex"
-else
-  echo "🔹 Alias déjà présent ➤ rien modifié"
+# 📦 Crée le dossier bin s'il n'existe pas
+mkdir -p "$HOME/.local/bin"
+
+# 🚀 Création du script lanceur avec chemin absolu
+cat > "$TARGET" <<EOF
+#!/bin/bash
+bash "$SOURCE" "\$@"
+EOF
+
+chmod +x "$TARGET"
+
+# 🛠️ Vérifie et corrige le PATH si ~/.local/bin n'est pas dedans
+if ! echo "$PATH" | grep -q "$HOME/.local/bin"; then
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+  source "$HOME/.bashrc"
+  echo "🔧 PATH mis à jour pour inclure ~/.local/bin"
 fi
 
-# 🔄 Recharge le shell
-source "$HOME/.bashrc"
-echo -e "\n🧠 Test rapide :"
-which smkortex && echo "🎉 smkortex est disponible dans le terminal"
+# 🔎 Test final du lanceur
+if which smkortex &>/dev/null; then
+  echo "✅ Lanceur opérationnel ➤ tape : smkortex"
+else
+  echo "⚠️ Le lanceur n'est pas reconnu ➤ redémarre ton terminal ou vérifie le PATH"
+fi
+
 
 
 
