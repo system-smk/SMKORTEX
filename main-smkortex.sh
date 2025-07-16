@@ -79,11 +79,11 @@ case "$CH" in
       echo "✅ Modèle déjà présent ➤ pas de téléchargement nécessaire"
     fi
 
-    bash scripts/instChatv2-kortex.sh
+
     bash scripts/configurer-lanceur.sh
     bash scripts/configurer-lanceur-webui.sh
     bash scripts/install-smkortex-webui.sh
-    
+    bash scripts/instChatv2-kortex.sh    
     # 🧾 Vérifie que les lanceurs sont bien exécutables
     chmod +x ~/.local/bin/smkortex 2>/dev/null || echo "⚠️ Lanceur smkortex introuvable ou non créé"
     chmod +x ~/.local/bin/webkortex 2>/dev/null || echo "⚠️ Lanceur webkortex introuvable ou non créé"
