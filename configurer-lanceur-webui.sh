@@ -17,7 +17,7 @@ cat > "$TARGET" <<EOF
 #!/bin/bash
 echo "🌐 Lancement de KORTEX WebUI..."
 cd "$WEBUI_PATH"
-KORTEX_ROOTDIR="$ROOTDIR" node serve.js
+KORTEX_ROOTDIR="$ROOTDIR" node server.js
 EOF
 
 # 🔧 Rendre le lanceur exécutable
