@@ -8,13 +8,14 @@ while [ -h "$SCRIPT_SOURCE" ]; do
   [[ $SCRIPT_SOURCE != /* ]] && SCRIPT_SOURCE="$DIR/$SCRIPT_SOURCE"
 done
 ROOTDIR="$(cd -P "$(dirname "$SCRIPT_SOURCE")/.." >/dev/null 2>&1 && pwd)"
-
+[[ -n "$KORTEX_ROOTDIR" ]] && ROOTDIR="$KORTEX_ROOTDIR"
 # === 📦 Chemins et logs
 mkdir -p "$ROOTDIR/logs"
 LOGFILE="$ROOTDIR/logs/session_$(date +"%H-%M_%d-%m-%Y").log"
 MODEL="$ROOTDIR/llama/models/model.gguf"
 BIN="$ROOTDIR/llama/llama.cpp/build/bin/llama-cli"
 PROMPT="$1"
+
 
 # === 🧪 Vérifs
 if [ ! -f "$BIN" ]; then echo "❌ Binaire introuvable ➤ compile avec clone-compile-llama.sh"; exit 1; fi
