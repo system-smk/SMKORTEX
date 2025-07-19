@@ -14,7 +14,7 @@ done
 
 echo "✅ Tous les scripts ont été déplacés dans ➤ ./scripts/"
 
-echo -e "\n🧠 Bienvenue dans Copilot Setup"
+echo -e "\n🧠 Bienvenue dans le Setup"
 
 SCRIPTS=(
   install-dependances.sh
