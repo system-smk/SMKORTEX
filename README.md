@@ -26,7 +26,7 @@ SMKortex est un assistant IA **100 % local**, conçu pour fonctionner sans con
 #### ✅ Étape 1 — Cloner le dépôt
 
 ```bash
-git clone https://github.com/ton-utilisateur/smkortex.git
+git clone https://github.com/system-smk/SMKORTEX.git
 cd smkortex
 ```
 
